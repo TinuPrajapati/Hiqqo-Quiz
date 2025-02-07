@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
 const bycrypt = require("bcryptjs");
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  otp: { type: Number, default: 0},
-  createdAt: { type: Date, default: Date.now },
-});
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: [true, "Name is required"] },
+    email: { type: String, required: [true, "Email is required"], unique: true },
+    password: { type: String, required: [true,"Password is required"] },
+    otp: { type: Number, default: 0 },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 // hash the password before saving the user
 userSchema.pre("save", async function (next) {
