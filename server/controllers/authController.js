@@ -28,6 +28,11 @@ const generateUsername = async (email) => {
 
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
   try {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -47,9 +52,10 @@ const signup = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.status(201).json({ token });
+    res.status(201).json({ token, message: "User created successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    console.log(`Error come in signup route: ${error}`);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -71,10 +77,11 @@ const login = async (req, res) => {
     }
     // Generate JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1d",
     });
-    res.status(200).json({ token });
+    res.status(200).json({ token,message:"User logged in successfully" });
   } catch (error) {
+    console.log(`Error come in login route: ${error}`);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
@@ -86,23 +93,7 @@ const forgotpass = async (req, res) =>{
   try {
     const generateOtp = Math.floor(Math.random() * 90000); // 4 digit OTP
 
-    // Looking to send emails in production? Check out our Email API/SMTP product!
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT),
-      secure: true, // true for port 465, false for other ports
-      auth: {
-        user: process.env.SMTP_MAIL,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    });
-
-    const info = await transporter.sendMail({
-      from: process.env.SMTP_MAIL, // sender address
-      to: email, // list of receivers
-      subject: "Your Reset Password OTP", // Subject line
-      html: `<b>OTP is: <i>${generateOtp}</i></b>`, // html body
-    });
+    const info = await sendMail({email, generateOtp});
     console.log(info.messageId);
     if(info.messageId){
       let user = await User.findOneAndUpdate(

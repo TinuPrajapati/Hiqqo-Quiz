@@ -1,5 +1,6 @@
 @tailwind base;
 @tailwind components;
+<<<<<<< HEAD
 @tailwind utilities;
 
 :root{
@@ -20,3 +21,6 @@ body{
 .shadow-btn{
     @apply bg-[var(--shadow-white--)] border-[#DFDFDF] border-[1.5px] rounded-[8px]
 }
+=======
+@tailwind utilities;
+>>>>>>> a43fa47b10bedaa6da57211b7acd47ee71be4387
