@@ -1,10 +1,10 @@
 import React from "react";
 import Landing2 from "./section/Landing2.jsx";
 import Landing1 from "./section/Landing1.jsx";
-import Landing7 from "./section/Landing7";
-import TestimonialsPage from "./section/TestimonialsPage";
+import Landing7 from "./section/Landing7.jsx";
+import TestimonialsPage from "./section/TestimonialsPage.jsx";
 import Landing5 from "./section/Landing5.jsx";
-import Landing6 from "./section/Landing6";
+import Landing6 from "./section/Landing6.jsx";
 
 import Navbar from "../Common/Navbar.jsx";
 function Landing() {
